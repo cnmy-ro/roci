@@ -1,15 +1,15 @@
-# Computaional Imaging
+# Computational Imaging
 
-Self-contained implementations of some algorithms used in computational imaging, especially MRI. This repo has a simple structure: `algorithm = python_file + demo_notebook`.
+Self-contained implementations of some algorithms used in computational imaging, focused especially on MRI. This repo has a simple structure: `algorithm = python_file + demo_notebook`.
 ```
 algorithms
     |
-    |- algorithm_1
-    |   |- algorithm_1.py
+    |- algo_1
+    |   |- algo_1.py
     |   |- Demo.ipynb
     |
-    |- algorithm_2
-    |   |- algorithm_2.py
+    |- algo_2
+    |   |- algo_2.py
     |   |- Demo.ipynb
     ...
 ```
