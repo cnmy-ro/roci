@@ -23,4 +23,5 @@ MRI reconstruction:
 - [Compressed sensing reconstruction](algorithms/cs/)
 
 MR signal simulation:
+- [Bloch simulation](algorithms/bloch/)
 - [Extended phase graph method](algorithms/epg/)
