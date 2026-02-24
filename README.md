@@ -1,6 +1,10 @@
-# Repository of Computational Imaging
+<!-- ![roci logo](docs/roci_logo.png) -->
 
-Self-contained implementations of some algorithms used in computational imaging, focused especially on MRI. This repo has a simple structure: `algorithm = python_file + demo_notebook`.
+<p align="center">
+  <img src="docs/roci_logo.png"  width="400">
+</p>
+
+Repository of computational imaging (`roci`) is a self-contained implementations of some algorithms used in imaging, currently focused on computational MRI. The directory structure is simple: `algorithm = python_file + demo_notebook`.
 ```
 algorithms
     |
