@@ -2,6 +2,8 @@
   <img src="docs/roci_logo.png"  width="400">
 </p>
 
+[![DOI](https://zenodo.org/badge/1132861288.svg)](https://doi.org/10.5281/zenodo.18778617)
+
 Repository of computational imaging (`roci`) is a collection of clean, self-contained implementations of algorithms used in computational imaging. Currently focused on computational MRI applications (reconstruction, synthesis, quantification) and techniques based on representation learning and generative modeling.
 
 The directory structure is simple: `algorithm = python_file + demo_notebook + readme`.
