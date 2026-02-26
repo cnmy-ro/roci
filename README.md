@@ -2,22 +2,23 @@
   <img src="docs/roci_logo.png"  width="400">
 </p>
 
-Repository of computational imaging (`roci`) is a collection of clean, self-contained implementations of algorithms used in computational imaging. Currently focused on computational MRI (reconstruction, synthesis, quantification) and techniques based on representation learning and generative modeling.
+Repository of computational imaging (`roci`) is a collection of clean, self-contained implementations of algorithms used in computational imaging. Currently focused on computational MRI applications (reconstruction, synthesis, quantification) and techniques based on representation learning and generative modeling.
 
-The directory structure is simple: `algorithm = python_file + demo_notebook`.
+The directory structure is simple: `algorithm = python_file + demo_notebook + readme`.
 ```
 algorithms
     |
     |- algo_1
     |   |- algo_1.py
     |   |- Demo.ipynb
+    |   |- README.md
     |
     |- algo_2
     |   |- algo_2.py
     |   |- Demo.ipynb
+    |   |- README.md
     ...
 ```
-
 
 ## Available Algorithms
 
@@ -29,7 +30,6 @@ MRI reconstruction:
 MR signal simulation:
 - [Bloch simulation](algorithms/bloch/)
 - [Extended phase graph method](algorithms/epg/)
-
 
 ## Coming Soon
 
