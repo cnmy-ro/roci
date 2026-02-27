@@ -1,6 +1,7 @@
 __pycache__
 .ipynb_checkpoints
 wandb
+.DS_STORE
 
 # Output files produced by the algorithms
 output
