@@ -33,13 +33,16 @@ MR signal simulation:
 - [Bloch simulation](algorithms/bloch/)
 - [Extended phase graph method](algorithms/epg/)
 
+Image representations:
+- [Implicit neural representation for differentiable uncalibrated imaging](algorithms/implicit_repr/)
+
+
 ## Coming Soon
 
 - [ ] Deep image prior
 - [ ] Compressed-sensing with generative modeling (CSGM)
 - [ ] Diffusion model-based reconstruction
 - [ ] Flow matching-based reconstruction
-- [ ] Implicit neural representations
 - [ ] Gaussian splatting
 - [ ] Plug-and-play denoiser-based reconstruction
 - [ ] Magnetic resonance spin tomography in time-domain (MR-STAT)
