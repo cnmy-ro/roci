@@ -41,14 +41,21 @@ Image representations:
 
 ## Coming Soon
 
+Inversion:
 - [ ] Deep image prior
-- [ ] Gaussian representations
-- [ ] Equivariant imaging
 - [ ] Double Blind Imaging with Generative Modeling
 - [ ] Compressed-sensing with generative modeling (CSGM)
-- [ ] noise2noise denoising
-- [ ] Plug-and-play denoiser-based reconstruction
 - [ ] Diffusion model-based inversion
 - [ ] Flow matching-based inversion
+- [ ] noise2noise denoising
+- [ ] BM3D denoising
+- [ ] Plug-and-play denoiser-based reconstruction
+- [ ] MoDL
 - [ ] ESPIRiT parallel-imaging
 - [ ] Magnetic resonance spin tomography in time-domain (MR-STAT)
+
+Representations and physics:
+- [ ] PINNs
+- [ ] Neural operators
+- [ ] Gaussian representations
+- [ ] Equivariant imaging
