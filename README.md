@@ -33,7 +33,7 @@ MRI reconstruction:
 
 MRI physics simulation:
 - [Bloch signal simulation](algorithms/bloch/)
-- [Extended phase graphs method](algorithms/epg/)
+- [Extended phase graphs (EPG) method](algorithms/epg/)
 
 Image representations:
 - [Implicit neural representations for differentiable uncalibrated imaging](algorithms/implicit_repr/)
@@ -60,3 +60,4 @@ Representations and physics:
 - [ ] Neural operators
 - [ ] Gaussian representations
 - [ ] [Structured and disentangled representations using flow-based models](https://link.springer.com/book/10.1007/978-3-031-88111-4)
+- [ ] [Phase distribution graphs (PDG) method for MR signal simulation](https://pubmed.ncbi.nlm.nih.gov/38576164/)
