@@ -32,7 +32,7 @@ algorithms
     ...
 ```
 
-All algorithms, even the classical signal-processing-based ones, are based on PyTorch, which means GPU support and autograd-friendly.
+All algorithms, including the classical signal-processing-based ones, are based on PyTorch. This means GPU acceleration and autograd compatibility.
 
 
 ## Available Algorithms
