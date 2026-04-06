@@ -7,9 +7,11 @@
 Repository of computational imaging (`roci`) is a collection of high-quality and self-contained (re-)implementations of algorithms used in computational imaging. In terms of applications, it currently focuses on forward and inverse problems in computational MRI (reconstruction, quantification, synthesis, physics simulation). In terms of techniques, `roci` includes classical signal processing algorithms as well as state-of-the-art representation learning and generative modeling methods. For educational and research purposes only.
 
 
-## Why `roci`
+<!-- ## Why `roci`
 
-Original software implmentations offered by authors of papers vary largely in quality and style, may be incomplete, or implemented in a less popular language or library. This introduces difficulty for students studying them and for reseachers and enginners adapting them for their own use. `roci` bridges this gap by providing software re-implementations that are concise, self-contained, and standardized in style.
+Original software implmentations offered by paper authors vary largely in quality and style and may be incomplete, outdated, or implemented in a less familiar language or library. This introduces a barrier for other applied reseachers benchmarking their own work, engineers building prototype systems based on these techniques, and students learning the practical programming conventions and practices. `roci` bridges this gap by offering software re-implementations that are concise, self-contained, standardized in style, and well-documented. 
+
+The implementations are tested for correctness, are based primarily on NumPy and PyTorch and use minimal set of other dependencies, and follow the PEP8 style guide. This means a wide range of readily usable computational imaging algorithms, all in one place. -->
 
 
 ## Code Organization
@@ -44,7 +46,7 @@ MRI physics simulation:
 - [Extended phase graphs (EPG) method](algorithms/epg/)
 
 MRI quantification:
-- [MRF parameter mapping using physics-informed MLP](algorithms/mrf_pm_mlp/)
+- [Physics-informed MLP for MRF parameter mapping](algorithms/mrf_pm_mlp/)
 
 
 ## Coming Soon
@@ -74,8 +76,7 @@ Forward physics modeling:
 - [Phase distribution graphs (PDG) method for MR signal simulation](https://pubmed.ncbi.nlm.nih.gov/38576164/)
 - [Quantum mechanical MRI simulations](https://pmc.ncbi.nlm.nih.gov/articles/PMC6641938/)
 - [UltimateSynth: MRI Physics for Pan-Contrast AI](https://pubmed.ncbi.nlm.nih.gov/39713417/)
-- PINNs
-- Fourier neural operators
+- Neural surrogates using PINNs and ourier neural operators
 
 
 
