@@ -14,7 +14,7 @@ Original software implmentations offered by paper authors vary largely in qualit
 The implementations are tested for correctness, are based primarily on NumPy and PyTorch and use minimal set of other dependencies, and follow the PEP8 style guide. This means a wide range of readily usable computational imaging algorithms, all in one place. -->
 
 
-## Code Organization
+## Code Organization and Features
 
 The directory structure is simple: `algorithm = python_file + demo_notebook + readme`.
 ```
@@ -31,6 +31,9 @@ algorithms
     |   |- README.md
     ...
 ```
+
+All algorithms, even the classical signal-processing-based ones, are based on PyTorch, which means GPU support and autograd-friendly.
+
 
 ## Available Algorithms
 

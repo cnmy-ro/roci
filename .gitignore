@@ -2,6 +2,7 @@ __pycache__
 .ipynb_checkpoints
 wandb
 .DS_STORE
+.vscode
 
 # Output files produced by the algorithms
 output

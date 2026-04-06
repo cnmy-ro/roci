@@ -7,21 +7,22 @@ TODO:
 """
 
 import numpy as np
+import torch
 
 
 # ---
 # FFTs
 
 def fft2c(image):
-    image = np.fft.ifftshift(image, axes=(-2, -1))
-    kspace = np.fft.fft2(image, axes=(-2, -1))
-    kspace = np.fft.fftshift(kspace, axes=(-2, -1))
+    image = torch.fft.ifftshift(image, dim=(-2, -1))
+    kspace = torch.fft.fft2(image, dim=(-2, -1))
+    kspace = torch.fft.fftshift(kspace, dim=(-2, -1))
     return kspace
 
 def ifft2c(kspace):
-    kspace = np.fft.ifftshift(kspace, axes=(-2, -1))
-    image = np.fft.ifft2(kspace, axes=(-2, -1))
-    image = np.fft.fftshift(image, axes=(-2, -1))
+    kspace = torch.fft.ifftshift(kspace, dim=(-2, -1))
+    image = torch.fft.ifft2(kspace, dim=(-2, -1))
+    image = torch.fft.fftshift(image, dim=(-2, -1))
     return image
 
 
@@ -54,13 +55,13 @@ class SENSE(LinOp):
     def H(self, kspace):
         kspace = self.mask * kspace
         coil_images = ifft2c(kspace)
-        image = np.sum(np.conj(self.csm) * coil_images, axis=0)
+        image = torch.sum(torch.conj(self.csm) * coil_images, dim=0)
         return image
 
 class IntensityCorrection(LinOp):
 
     def __init__(self, csm):        
-        self.weight_map = 1. / (np.sqrt(np.sum(np.abs(csm)**2, axis=0) + 1e-12))
+        self.weight_map = 1. / (torch.sqrt(torch.sum(csm.abs()**2, dim=0) + 1e-12))
 
     def __call__(self, image):
         return self.weight_map * image
@@ -84,7 +85,7 @@ class DensityCorrection(LinOp):
 # Utils
 
 def conjdot(a, b):
-    return np.abs(np.sum(a.conj() * b))
+    return torch.abs(torch.sum(torch.conj(a) * b))
 
 
 # ---
@@ -99,9 +100,9 @@ def cg_sense(kspace, csm, mask, eps=1e-6):
 
     # Init state
     a = I(E.H(D(kspace)))  # (H, W)
-    b = np.zeros_like(a)  # (H, W)
-    p = a.copy()          # (H, W)
-    r = a.copy()          # (H, W)
+    b = torch.zeros_like(a)  # (H, W)
+    p = a.clone()          # (H, W)
+    r = a.clone()          # (H, W)
 
     # Precompute
     rdotr_prev = conjdot(r, r)
