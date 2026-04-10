@@ -4,7 +4,7 @@ authors:
   - family-names: Rao
     given-names: Chinmay
     orcid: https://orcid.org/0000-0002-2472-2409
-title: "Repository of Computational Imaging (roci)"
+title: "Repository of Computational Imaging (ROCI)"
 version: 0.1.1
 identifiers:
   - type: doi

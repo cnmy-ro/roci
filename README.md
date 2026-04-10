@@ -1,17 +1,20 @@
-<p align="center">
+<!-- <p align="center">
   <img src="docs/roci_logo.png"  width="400">
+</p> -->
+<p align="center">
+  <img src="docs/compimg_graphic--annotated.png"  width="800">
 </p>
 
 [![DOI](https://zenodo.org/badge/1132861288.svg)](https://doi.org/10.5281/zenodo.18778617)
 
-Repository of computational imaging (`roci`) is a collection of high-quality and self-contained (re-)implementations of algorithms used in computational imaging. In terms of applications, it currently focuses on forward and inverse problems in computational MRI (reconstruction, quantification, synthesis, physics simulation). In terms of techniques, `roci` includes classical signal processing algorithms as well as state-of-the-art representation learning and generative modeling methods. For educational and research purposes only.
+Repository of computational imaging (`ROCI`) is a collection of minimalistic, high-quality, and self-contained PyTorch (re-)implementations of algorithms used in computational imaging. In terms of applications, it currently focuses on forward and inverse problems appearing in computational MRI (reconstruction, quantification, synthesis, physics simulation). In terms of techniques, `ROCI` includes classical signal processing algorithms as well as state-of-the-art representation learning and generative modeling methods. For educational and research purposes only.
 
 
-<!-- ## Why `roci`
+<!-- ## Why `ROCI`
 
-Original software implmentations offered by paper authors vary largely in quality and style and may be incomplete, outdated, or implemented in a less familiar language or library. This introduces a barrier for other applied reseachers benchmarking their own work, engineers building prototype systems based on these techniques, and students learning the practical programming conventions and practices. `roci` bridges this gap by offering software re-implementations that are concise, self-contained, standardized in style, and well-documented. 
+Original software implmentations offered by paper authors vary largely in quality and style and may be incomplete, outdated, or implemented in a less familiar language or library. This introduces a barrier for other applied reseachers benchmarking their work, engineers building prototype systems based on these techniques, and students learning the practical programming conventions and practices. `ROCI` bridges this gap by offering software re-implementations that are concise, self-contained, standardized in style, and well-documented. 
 
-The implementations are tested for correctness, are based primarily on NumPy and PyTorch and use minimal set of other dependencies, and follow the PEP8 style guide. This means a wide range of readily usable computational imaging algorithms, all in one place. -->
+The implementations are tested for correctness, are based primarily on PyTorch, and follow the PEP8 style guide. This means a wide range of readily accessible and usable computational imaging algorithms, all in one place. -->
 
 
 ## Code Organization and Features
@@ -32,7 +35,9 @@ algorithms
     ...
 ```
 
-All algorithms, including the classical signal-processing-based ones, are based on PyTorch. This means GPU acceleration and autograd compatibility.
+All algorithms, including the classical signal processing methods, are written in PyTorch. This means autograd compatibility and GPU-accelerated compute.
+
+ROCI provides tiny versions of algorithms applied on miniature toy problems, e.g. generative modeling of toy distributions in 2D space. There can be found in [`tiny`](tiny).
 
 
 ## Available Algorithms
@@ -90,7 +95,7 @@ If you use any code from this repository, please cite it as:
 @software{Rao_Repository_of_Computational_2026,
 author = {Rao, Chinmay},
 month = feb,
-title = {{Repository of Computational Imaging (roci)}},
+title = {{Repository of Computational Imaging (ROCI)}},
 version = {0.1.1},
 year = {2026}
 }
