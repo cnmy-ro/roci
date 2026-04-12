@@ -1,7 +1,7 @@
 # Repository of Computational Imaging
 
 <p align="center">
-  <img src="docs/compimg_graphic--annotated.png"  width="800">
+  <img src="docs/compimg_graphic.png"  width="800" alt="This figure uses the Calabi-Yau manifold SVG as a component, taken from: https://commons.wikimedia.org/wiki/File:Calabi_yau_formatted.svg">
 </p>
 
 [![DOI](https://zenodo.org/badge/1132861288.svg)](https://doi.org/10.5281/zenodo.18778617)
@@ -10,7 +10,7 @@ ROCI is a collection of minimalistic, high-quality, and self-contained PyTorch (
 
 Each algorithm, including the classical signal processing methods, are written in PyTorch. This means autograd compatibility and GPU-accelerated compute. 
 
-This code is meant for educational and research purposes only.
+ROCI is a collection of self-contained and documented algorithms, not a coherent Python library (yet). This code is meant for educational and research purposes only.
 
 
 <!-- ## Why ROCI
@@ -66,6 +66,7 @@ Inversion:
 - [Equivariant splitting](https://arxiv.org/abs/2510.00929)
 - [Double blind imaging with generative modeling](https://arxiv.org/abs/2503.21501)
 - [Compressed-sensing with generative modeling (CSGM)](https://arxiv.org/abs/1703.03208)
+- [Plug-and-play reconstruction based on content/style modeling](https://arxiv.org/abs/2409.13477)
 - Plug-and-play inversion based on diffusion modeling and flow matching
 - [noise2noise denoising](https://arxiv.org/abs/1803.04189)
 - BM3D denoising
