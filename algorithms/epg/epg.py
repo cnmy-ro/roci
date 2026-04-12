@@ -2,7 +2,6 @@ from abc import ABC
 
 import numpy as np
 import torch
-import matplotlib.pyplot as plt
 
 
 
@@ -187,27 +186,10 @@ class Sequence(ABC):
         self.timing = timing
         self.name = name
 
-    def plot_seq(self):
-        plt.figure(num=1)
-        plt.plot([0, self.timing[len(self.timing)-1]], [0.5, 0.5], 'k-')
-        # Plot rf as vertical lines and annotate flip angles
-        rf_ind = 0
-        for k in range(len(self.timing)):
-            if self.events[k] == "rf":
-                # Draw a line and annotate flip angle
-                plt.plot([self.timing[k], self.timing[k]], [0.5, 1], 'b-')
-                plt.text(self.timing[k], 1, str(self.rf[rf_ind]) + "$^\circ$")
-                rf_ind += 1
-            elif self.events[k] == "grad":
-                print("")
-                # Fill area with gradient polarity & annotate dk
-        plt.title(self.name)
-        plt.show()
-    
 
 class SpinEchoSequence(Sequence):
     """
-    Spin-echo sequence
+    Spin echo sequence
     """
     def __init__(self, alpha, te, tr, reps):
 
@@ -221,7 +203,7 @@ class SpinEchoSequence(Sequence):
         events = ['rf', 'grad', 'relax', 'rf', 'relax'] * reps
         timing = np.array([0, te/2, te/2, te/2, tr])
         for rep in range(1, reps):
-            timing = np.append(timing, np.array([0, te/2, te/2, te/2, tr]) + rep*tr)
+            timing = np.append(timing, np.array([0, te/2, te/2, te/2, tr]) + rep * tr)
         grad = [1] * reps
         rf = [(np.pi/2, np.pi/2), (0, alpha)] * reps
         super().__init__(rf, grad, events, timing, "SE")
@@ -229,15 +211,7 @@ class SpinEchoSequence(Sequence):
 
 class TurboSpinEchoSequence(Sequence):
     """ 
-    Turbo Spin Echo sequence (repeated RF excitation with constant interval TR)
-
-    Parameters:
-        alpha : float
-            Flip angle for repeated pulses (2nd to last)
-        etl : int
-            Echo train length
-        esp : float
-            Echo spacing [ms]; first interval is esp/2 and second to last intervals are all esp
+    Turbo spin echo sequence
     """
     def __init__(self, alpha, etl, esp):
 
@@ -251,7 +225,7 @@ class TurboSpinEchoSequence(Sequence):
         events.extend(etl*['rf', 'grad', 'relax', 'grad', 'relax'])
         timing = np.array([0, esp/2, esp/2])
         timing = np.append(timing, esp/2 + np.array(etl * [0, esp/2, esp/2, esp, esp] + np.repeat(esp * np.arange(etl), 5)))
-        grad = (2*etl + 1) * [1]
+        grad = (2 * etl + 1) * [1]
         rf = [(np.pi/2, np.pi/2)]    # First 90deg excitation pulse
-        rf.extend(etl*[(0, alpha)])  # Pulses to generate the echo train
+        rf.extend(etl * [(0, alpha)])  # Pulses to generate the echo train
         super().__init__(rf, grad, events, timing, "TSE")

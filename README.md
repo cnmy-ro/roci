@@ -6,19 +6,23 @@
 
 [![DOI](https://zenodo.org/badge/1132861288.svg)](https://doi.org/10.5281/zenodo.18778617)
 
-ROCI is a collection of minimalistic, high-quality, and self-contained PyTorch (re-)implementations of algorithms used in computational imaging. In terms of applications, it currently focuses on forward and inverse problems appearing in computational MRI (reconstruction, quantification, synthesis, physics simulation). In terms of techniques, ROCI includes classical signal processing algorithms as well as state-of-the-art representation learning and generative modeling methods. For educational and research purposes only.
+ROCI is a collection of minimalistic, high-quality, and self-contained PyTorch (re-)implementations of algorithms used in computational imaging. In terms of applications, it currently focuses on forward and inverse problems appearing in computational MRI (reconstruction, quantification, synthesis, physics simulation). In terms of techniques, ROCI includes classical signal processing algorithms as well as state-of-the-art representation learning and generative modeling methods. 
+
+Each algorithm, including the classical signal processing methods, are written in PyTorch. This means autograd compatibility and GPU-accelerated compute. 
+
+This code is meant for educational and research purposes only.
 
 
 <!-- ## Why ROCI
 
-Original software implmentations offered by paper authors vary largely in quality and style and may be incomplete, outdated, or implemented in a less familiar language or library. This introduces a barrier for other applied reseachers benchmarking their work, engineers building prototype systems based on these techniques, and students learning the practical programming conventions and practices. ROCI bridges this gap by offering software re-implementations that are concise, self-contained, standardized in style, and well-documented. 
+Original software implmentations offered by paper authors vary largely in quality and style and may be incomplete, outdated, or implemented in a less familiar language or library. This introduces a barrier for other applied reseachers benchmarking their work, engineers building prototype systems on these techniques, and students learning the practical programming conventions and tricks. ROCI bridges this gap by offering software re-implementations that are concise, self-contained, standardized in style, and well-documented. 
 
-The implementations are tested for correctness, are based primarily on PyTorch, and follow the PEP8 style guide. This means a wide range of readily accessible and usable computational imaging algorithms, all in one place. -->
+These implementations are tested for correctness, are based primarily on PyTorch, and follow the PEP8 style guide. This means a wide range of readily accessible and usable computational imaging algorithms, all in one place. -->
 
 
-## Code Organization and Features
+## Code Organization
 
-All algorithms are stored in the `algorithms` directory. The directory structure is simple: `algorithm = python_file + demo_notebook + readme`.
+All algorithms are stored in the [`algorithms`](algorithms) directory. The directory structure is simple: `algorithm = python_file + demo_notebook + readme`.
 ```
 algorithms
     |
@@ -34,9 +38,7 @@ algorithms
     ...
 ```
 
-Each algorithm, including the classical signal processing methods, are written in PyTorch. This means autograd compatibility and GPU-accelerated compute.
-
-ROCI also provides tiny versions of some algorithms applied on miniature toy problems, e.g. generative modeling of toy distributions in 2D space. There can be found in [`tiny`](tiny).
+ROCI also provides tiny versions of some algorithms applied on miniature toy problems, e.g. generative modeling of toy distributions in 2D space. These can be found in the [`tiny`](tiny) directory.
 
 
 ## Available Algorithms
@@ -46,7 +48,7 @@ MRI reconstruction:
 - [CG-SENSE parallel-imaging reconstruction](algorithms/cg_sense/)
 - [Compressed sensing reconstruction](algorithms/cs/)
 - [MoDL unrolled network](algorithms/modl/)
-- [Implicit neural representations for differentiable uncalibrated imaging](algorithms/implicit_repr/)
+- [Implicit neural representations for differentiable uncalibrated imaging](algorithms/diff_uncalib_img/)
 - [Deep image prior](algorithms/dip/)
 
 MRI forward physics simulation:
@@ -67,6 +69,7 @@ Inversion:
 - Plug-and-play inversion based on diffusion modeling and flow matching
 - [noise2noise denoising](https://arxiv.org/abs/1803.04189)
 - BM3D denoising
+- [GRAPPA parallel-imaging reconstruction](https://pubmed.ncbi.nlm.nih.gov/12111967/)
 - [ESPIRiT parallel-imaging](https://pmc.ncbi.nlm.nih.gov/articles/PMC4142121/)
 - [Motion-corrected MRI with DISORDER](https://pubmed.ncbi.nlm.nih.gov/31898832/)
 - [Magnetic resonance spin tomography in time-domain (MR-STAT)](https://doi.org/10.1016/j.mri.2017.10.015)
