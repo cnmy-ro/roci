@@ -25,9 +25,11 @@ class ComplexMLPFullLength(nn.Module):
         self.blocks.append(ComplexLinearBlock(128, 64,  activation=True))
         self.blocks.append(ComplexLinearBlock(64, 64,   activation=True))
         self.blocks.append(ComplexLinearBlock(64, 32,   activation=True))
-        self.blocks.append(ComplexLinearBlock(32, 2,    activation=False))
+        self.blocks.append(ComplexLinearBlock(32, 16,   activation=True))
+        self.blocks.append(ComplexLinearBlock(16, 8,    activation=True))
+        self.backbone = nn.Sequential(*self.blocks).to(self.device)       
 
-        self.model = nn.Sequential(*self.blocks).to(self.device)       
+        self.to_params = nn.Linear(8*2, 2)
 
     def forward(self, x):
 
@@ -37,9 +39,9 @@ class ComplexMLPFullLength(nn.Module):
         x = x * correction_factors
         
         # Forward pass
-        out = self.model(x)
-        out = out.abs()
-
+        x = self.backbone(x)
+        x = torch.cat([x.real, x.imag], dim=1)
+        out = self.to_params(x)
         return out
 
 
@@ -62,9 +64,10 @@ class ComplexMLPCompressed(nn.Module):
         self.blocks.append(ComplexLinearBlock(128, 64,  activation=True))
         self.blocks.append(ComplexLinearBlock(64,  32,  activation=True))
         self.blocks.append(ComplexLinearBlock(32,  16,  activation=True))
-        self.blocks.append(ComplexLinearBlock(16,  2,   activation=False))
+        self.blocks.append(ComplexLinearBlock(16,  8,   activation=True))
+        self.backbone = nn.Sequential(*self.blocks).to(self.device)
 
-        self.model = nn.Sequential(*self.blocks).to(self.device)       
+        self.to_params = nn.Linear(8*2, 2)
 
     def forward(self, x):
     
@@ -74,9 +77,9 @@ class ComplexMLPCompressed(nn.Module):
         x = x * correction_factors
 
         # Forward pass
-        out = self.model(x)
-        out = out.abs()
-        
+        x = self.model(x)
+        x = torch.cat([x.real, x.imag], dim=1)
+        out = self.to_params(x)
         return out
 
 
@@ -110,3 +113,38 @@ class ComplexCardioid(nn.Module):
         phase = x.angle()
         attenuation_factor = 0.5 * (1 + torch.cos(phase))
         return attenuation_factor * x
+    
+
+def crb_weighted_mse_loss(params_estim, params_gt, params_crb):
+    """ Cramer-Rao bound weighted MSE loss for learning
+    the minimum-variance unbiased estimator (MVUE) of the parameters.
+    """
+    return torch.mean((params_estim - params_gt) ** 2 / params_crb)
+
+
+def compute_crb_values_approx(params_delta, signal_deltas, noise_std):
+    """ Calculate CRB values of parameters 
+    via finite difference approximation. 
+
+    args:
+        params_delta:  Shape (batch, num_params)
+        signal_deltas: Shape (batch, num_params, length)
+        noise_std: float
+    """
+    num_params = params_delta.shape[1]
+    jacobian_matrix = torch.stack([(signal_deltas[:,i]) / params_delta[:,i] for i in range(num_params)], dim=1) # Shape (batch, num_params, length)
+    fisher_matrix = (1 / (noise_std ** 2)) * torch.matmul(torch.conj(jacobian_matrix).T, jacobian_matrix)  
+    params_crb = torch.diag(torch.linalg.inv(fisher_matrix))
+    params_crb = params_crb.abs().to(torch.float)
+    return params_crb
+
+    
+def compute_crb_values_exact(params, model_jac_func, noise_std):
+    """ Calculate CRB values of parameters 
+    via exact derivatives.
+    """
+    jacobian_matrix = model_jac_func(params)
+    fisher_matrix = (1 / (noise_std ** 2)) * torch.matmul(torch.conj(jacobian_matrix).T, jacobian_matrix)  
+    params_crb = torch.diag(torch.linalg.inv(fisher_matrix))
+    params_crb = params_crb.abs().to(torch.float)
+    return params_crb
