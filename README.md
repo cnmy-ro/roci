@@ -10,7 +10,7 @@ ROCI is a collection of minimalistic, high-quality, and self-contained PyTorch (
 
 Each algorithm, including the classical signal processing methods, are written in PyTorch. This means autograd compatibility and GPU-accelerated compute. 
 
-ROCI is a collection of self-contained and documented algorithms, not a coherent Python library (yet). This code is meant for educational and research purposes only.
+ROCI is a collection of self-contained and documented algorithms, not a coherent Python library. Such a python library is under development as a separate project, temporarily being housed here as [`rocilib`](rocilib). All of this code is meant for educational and research purposes only.
 
 
 <!-- ## Why ROCI
@@ -91,7 +91,6 @@ Forward physics modeling:
 - [UltimateSynth: MRI Physics for Pan-Contrast AI](https://pubmed.ncbi.nlm.nih.gov/39713417/)
 - [Neural surrogates based on PINNs](https://www.sciencedirect.com/science/article/pii/S0021999118307125)
 - [Neural surrogates based on Fourier neural operators](https://arxiv.org/abs/2010.08895)
-
 
 
 ## Citation
