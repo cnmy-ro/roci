@@ -3,13 +3,17 @@
 `rocilib` aims to be the Keras of computational imaging.
 
 
-Core constructs:
-1. `Representation`: observations and latents
-2. `ForwardModel`: Model of the sensor, represents the data generation process of the observation `Representation` from the underlying latent `Representation`
-3. `InverseInferer`: Inference algorithm for inverting the observation `Representation` through the `ForwardModel` to obtain the latent `Representation`
-4. `ActiveSampler`: Feedback from latents to determine how to sample the next observation.
+Core abstractions:
+1. `Observation`: Observed sample
+2. `ForwardModel`: Parametric model of the sensing apparatus. Represents the generative process of the `Observation` from the underlying latent parameters. Probabilistic, differentiable, and composable.
+3. `InverseInferer`: Inference algorithm for inverting the `Observation` through the `ForwardModel` to obtain the latent parameters.
 
 
 Usage:
-1. Define the representation and the forward model
-2. Invert
+1. Define the forward model
+2. Define the observation
+3. Invert
+
+
+Additional features:
+- Numerical analysis of the forward model's theoretical properties, e.g., identifiability and estimability
