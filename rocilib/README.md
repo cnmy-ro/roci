@@ -11,9 +11,10 @@ Core abstractions:
 
 Usage:
 1. Define the forward model
-2. Define the observation
+2. Define and initialize the observation
 3. Invert
 
 
 Additional features:
-- Numerical analysis of the forward model's theoretical properties, e.g., identifiability and estimability
+- Numerical tools to analyze the forward model's theoretical properties, e.g., identifiability and estimability
+- Active sampler based on a feedback loop
