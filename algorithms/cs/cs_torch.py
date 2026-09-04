@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import pywt, ptwt
 from tqdm import tqdm
-
+import torch.nn.functional as F
 
 
 def fft2c(image):
@@ -74,15 +74,16 @@ class ForwardOperator:
     """
     Undersampled 2D Fourier operator
     """
-    def __init__(self, mask):
+    def __init__(self, mask, csm=None):
         self.mask = mask
+        self.csm = csm if csm is not None else torch.ones(self.mask.shape, dtype=torch.cfloat, device=self.mask.device)
 
     def __call__(self, estim):
-        kspace_estim = fft2c(estim) * self.mask
+        kspace_estim = fft2c(estim * self.csm) * self.mask
         return kspace_estim
     
     def hermitian(self, kspace_estim):
-        return ifft2c(kspace_estim * self.mask)
+        return (ifft2c(kspace_estim * self.mask) * self.csm.conj()).sum(dim=1,keepdims=True)
 
 
 class Objective:
@@ -294,3 +295,107 @@ class ISTASolver:
                 break
             i -= 1
         return i
+
+
+
+
+# ---
+# Simple functional implementation of ISTA/FISTA
+
+@torch.no_grad()
+def l1_wavelet_fista(kspace, mask, csm, max_eig, regul_weight, fast, num_iters):
+
+    # Recon        
+    step_size = 1 / max_eig
+    image_estim_prev = sense2d_forward_op_hermitian(kspace, mask, csm)
+    y = image_estim_prev
+    t = 1
+
+    for _ in range(num_iters):
+        
+        if fast:  # FISTA
+            # DC update
+            image_estim = y - step_size * sense2d_forward_op_hermitian( sense2d_forward_op(y, mask, csm) - kspace, mask, csm)
+            # Prox update
+            image_estim = wavelet_soft_thresh(image_estim, regul_weight, step_size)  
+            # Nesterov accel
+            t_next = (1 + np.sqrt(1 + 4 * t**2)) / 2
+            y_next = image_estim + ((t - 1) / t_next) * (image_estim - image_estim_prev)
+        else:      # ISTA
+            # DC update
+            image_estim = image_estim_prev - step_size * sense2d_forward_op_hermitian( sense2d_forward_op(image_estim_prev, mask, csm) - kspace, mask, csm )
+        
+            # Prox update
+            image_estim = wavelet_soft_thresh(image_estim, regul_weight, step_size)  
+
+        # Update values for next iter
+        image_estim_prev = image_estim.clone()
+        if fast:
+            y = y_next.clone()
+            t = t_next
+
+    return image_estim
+
+
+def wavelet_soft_thresh(image_estim, weight, step_size):
+    orig_shape = image_estim.shape[-2:]
+    image_estim = pad_to_nearest_divisible_size(image_estim, divisor=2, strict=False)
+    wt_coeffs = dwt2(image_estim)
+    wt_coeffs[0] = prox_l1_norm_complex(wt_coeffs[0], weight * step_size)
+    for level in range(1, len(wt_coeffs)):
+        for i in range(3): wt_coeffs[level][i] = prox_l1_norm_complex(wt_coeffs[level][i], weight * step_size)
+    image_estim = idwt2(wt_coeffs)
+    image_estim = unpad(image_estim, orig_shape) 
+    return image_estim
+
+
+def prox_l1_norm_complex(tensor, alpha):
+    # Based on: https://stats.stackexchange.com/questions/357339/soft-thresholding-for-the-lasso-with-complex-valued-data
+    return torch.exp(1j*tensor.angle()) * torch.maximum(tensor.abs() - alpha, torch.zeros_like(tensor.abs()))
+
+
+def pad_to_nearest_divisible_size(image, divisor=32, strict=False, pad_mode='reflect'):
+
+    orig_h, orig_w = image.shape[-2], image.shape[-1]
+    candidates_h, candidates_w = np.array([divisor * i for i in range(1000)]), np.array([divisor * i for i in range(1000)])    
+    if strict: candidates_h, candidates_w = candidates_h[candidates_h > orig_h], candidates_w[candidates_w > orig_w]
+    else:      candidates_h, candidates_w = candidates_h[candidates_h >= orig_h], candidates_w[candidates_w >= orig_w]
+    new_h, new_w = candidates_h[np.argmin(candidates_h - orig_h)], candidates_w[np.argmin(candidates_w - orig_w)]
+
+    if (new_h-orig_h)%2 == 0: padding_h_before = padding_h_after = (new_h-orig_h)//2
+    else:                     padding_h_before, padding_h_after = (new_h-orig_h)//2, (new_h-orig_h)//2 + 1
+    if (new_w-orig_w)%2 == 0: padding_w_before = padding_w_after = (new_w-orig_w)//2
+    else:                     padding_w_before, padding_w_after = (new_w-orig_w)//2, (new_w-orig_w)//2 + 1
+
+    if isinstance(image, np.ndarray):
+        padding = ((padding_h_before, padding_h_after), (padding_w_before, padding_w_after))
+        padded_image = np.pad(image, pad_width=((padding_h_before, padding_h_after), (padding_w_before, padding_w_after)), mode=pad_mode)
+    elif isinstance(image, torch.Tensor):
+        padding = (padding_w_before, padding_w_after, padding_h_before, padding_h_after)
+        padded_image = F.pad(image, pad=padding, mode=pad_mode)
+
+    return padded_image
+
+def unpad(image, orig_size):
+
+    orig_h, orig_w = orig_size[-2], orig_size[-1]
+    curr_h, curr_w = image.shape[-2], image.shape[-1]
+
+    from_h = (curr_h-orig_h)//2
+    to_h = curr_h - (curr_h-orig_h)//2 if (curr_h-orig_h)%2 == 0 else curr_h - (curr_h-orig_h)//2 - 1
+    from_w = (curr_w-orig_w)//2
+    to_w = curr_w - (curr_w-orig_w)//2 if (curr_w-orig_w)%2 == 0 else curr_w - (curr_w-orig_w)//2 - 1
+
+    unpadded_image = image[..., from_h:to_h, from_w:to_w]
+    return unpadded_image
+
+
+def sense2d_forward_op(image, csm, mask):
+    kspace = fft2c(image * csm, axes=[-2,-1]) * mask
+    return kspace
+
+
+def sense2d_forward_op_hermitian(kspace, csm, mask):
+    coil_images = ifft2c(kspace * mask, axes=[-2,-1])
+    image = torch.sum(coil_images * csm.conj(), dim=1, keepdim=True)
+    return image
